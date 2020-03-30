@@ -5,7 +5,7 @@
 同时也可以通过该软件打开本项目生成的文件进行查看。
 #相关链接
 RDF: https://www.runoob.com/rdf/rdf-tutorial.html  
-protege:
+protege: https://protege.stanford.edu/products.php#desktop-protege
 # owl相关介绍  
 概念：OWL是一种本体表示语言。常用于定义本体，换句话说相当于定义关系型数据库的一张表。提供快速、灵活的数据建模能力。  
 常用的属性介绍：  
