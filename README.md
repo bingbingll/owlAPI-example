@@ -3,7 +3,7 @@
 使用前需要熟悉IRI,OWL,RDF,RDFS的概念和语法。这些是很有必要的否者你很难理解什么是概念图！
 其次需要你下载protege软件，你可以使用该软件手动创建一个概念图来加深你的了解。
 同时也可以通过该软件打开本项目生成的文件进行查看。
-#相关链接
+#相关链接  
 RDF: https://www.runoob.com/rdf/rdf-tutorial.html  
 protege: https://protege.stanford.edu/products.php#desktop-protege
 # owl相关介绍  
@@ -24,6 +24,6 @@ protege: https://protege.stanford.edu/products.php#desktop-protege
 推荐使用 turtle 文件进行操作方便阅读。本工程中 [OntologyHelper](https://github.com/bingbingll/owlAPI-example/blob/master/src/main/java/com/example/demo/utils/OntologyHelper.java) 类封装了一些常用的操作类可以直接方便使用。  
 示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java)   
 ##owlAPI使用心得
-1、OWL-API 非我们所理解的面向对象常规调用操作，他的操作相当于你要创建什么对象首先要get一个然后根据个节点在get(object var) 这样放入，不是set操作。 
-2、因此我们需要借助protege客户端进行分析操作。所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。  
-3、owl api 可以创建概念图也可以创建实例图，概念图就是一个设计，实例图就是真实的业务数据。
+1、OWL-API 非我们所理解的面向对象常规调用操作，他的操作相当于你要创建什么对象首先要get一个然后根据个节点在get(object var) 这样放入，不是set操作。   
+2、因此我们需要借助protege客户端进行分析操作。所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。    
+3、owl api 可以创建概念图也可以创建实例图，概念图就是一个设计，实例图就是真实的业务数据。  
