@@ -20,4 +20,10 @@ protege: https://protege.stanford.edu/products.php#desktop-protege
 （9）	owl：equivalentProperty：术语可以声明两个属性为等价属性。相互等价的属性将一个个体关联到同一组别个体。它也可以被称为创建同义属性。  
 
 # 工程介绍
-推荐使用 turtle 文件进行操作方便阅读。
+##使用示例
+推荐使用 turtle 文件进行操作方便阅读。本工程中 [OntologyHelper](https://github.com/bingbingll/owlAPI-example/blob/master/src/main/java/com/example/demo/utils/OntologyHelper.java) 类封装了一些常用的操作类可以直接方便使用。  
+示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java)   
+##owlAPI使用心得
+1、OWL-API 非我们所理解的面向对象常规调用操作，他的操作相当于你要创建什么对象首先要get一个然后根据个节点在get(object var) 这样放入，不是set操作。 
+2、因此我们需要借助protege客户端进行分析操作。所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。  
+3、owl api 可以创建概念图也可以创建实例图，概念图就是一个设计，实例图就是真实的业务数据。
