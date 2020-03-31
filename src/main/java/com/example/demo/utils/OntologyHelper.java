@@ -183,6 +183,11 @@ public class OntologyHelper {
         return df.getOWLDataProperty(iri);
     }
 
+    public OWLAxiomChange addDataPropertyLabel(OWLOntology o,OWLDataProperty dataProperty,String label){
+        OWLAnnotation owlAnnotation = df.getOWLAnnotation(df.getRDFSLabel(), df.getOWLLiteral(label));
+        return new AddAxiom(o,  df.getOWLAnnotationAssertionAxiom(dataProperty.getIRI(), owlAnnotation));
+    }
+
     public OWLAxiomChange addDataToIndividual(OWLOntology o, OWLIndividual individual, OWLDataProperty property, String value) {
         OWLLiteral literal = df.getOWLLiteral(value, OWL2Datatype.XSD_STRING);
         return new AddAxiom(o, df.getOWLDataPropertyAssertionAxiom(property, individual, literal));
