@@ -6,11 +6,13 @@ import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -145,8 +147,11 @@ class DemoApplicationTests {
 			OWLDeclarationAxiom hasLongitudeAxiom = factory.getOWLDeclarationAxiom(hasLongitude);
 			OWLDeclarationAxiom hasLatitudeAxiom = factory.getOWLDeclarationAxiom(hasLatitude);
 			OWLDeclarationAxiom hasAddrAxiom = factory.getOWLDeclarationAxiom(hasAddr);
+
+
 			//添加到set中方便操作。
 			Set<OWLDeclarationAxiom> dataHasAxiomSet = new HashSet<>(5);
+			//将name的标签进行添加
 			dataHasAxiomSet.add(hasNameAxiom);
 			dataHasAxiomSet.add(hasAgeAxiom);
 			dataHasAxiomSet.add(hasLongitudeAxiom);
@@ -154,6 +159,20 @@ class DemoApplicationTests {
 			dataHasAxiomSet.add(hasAddrAxiom);
 			manager.addAxioms(ontology, dataHasAxiomSet);
 
+			//给属性添加标签
+			//获取一个注解属性标签类
+			OWLAnnotationProperty nameLabel = factory.getRDFSLabel();
+			//定义一个文字类并赋值
+			OWLLiteral nameLiteral = factory.getOWLLiteral("名称");
+			//获取一个全局的注解类并添加标签栏和文字类
+			OWLAnnotation owlAnnotation = factory.getOWLAnnotation(nameLabel, nameLiteral);
+			//获取一个注解断言公理然后将要添加的标签数据属性类和全局的注解类进行绑定
+			OWLAnnotationAssertionAxiom nameLabelAxiom = factory.getOWLAnnotationAssertionAxiom(hasName.getIRI(), owlAnnotation);
+			Set<OWLAnnotationAssertionAxiom> dataAnnotationAxiomSet = new HashSet<>();
+			//添加到集合中
+			dataAnnotationAxiomSet.add(nameLabelAxiom);
+			//接口调用添加
+			manager.addAxioms(ontology,dataAnnotationAxiomSet);
 
 			//定义对象属性归于
 			Set<OWLAxiom> domainsAndRanges = new HashSet<OWLAxiom>();
