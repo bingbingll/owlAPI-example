@@ -27,8 +27,8 @@ owlapi: https://github.com/owlcs/owlapi
 推荐使用 turtle 文件进行操作方便阅读。本工程中 [OntologyHelper](https://github.com/bingbingll/owlAPI-example/blob/master/src/main/java/com/example/demo/utils/OntologyHelper.java) 类封装了一些常用的操作类可以直接方便使用。  
 示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java)   
 ## owlAPI使用心得  
-1、强烈建议使用protege客户端先手动设计一个图，并在该图中增加实例数据，然后在看本工程有助于快速了解，否则很难理解api的设计。 
-2、OWL-API 非我们所理解的面向对象常规调用操作，他的框架时面向对象，但是你使用的接口是过程编写，例如我们要给一个数据属性添加label看如下代码：  
+1、强烈建议使用protege客户端先手动设计一个图，并在该图中增加实例数据，然后在看本工程有助于快速了解，否则很难理解api的设计。<br />
+2、OWL-API 非我们所理解的面向对象常规调用操作，他的框架时面向对象，但是你使用的接口是过程编写，例如我们要给一个数据属性添加label看如下代码：<br />
 >       
     //定义全局数据属性，既实际的属性要以名词命名。
     OWLDataProperty hasName = factory.getOWLDataProperty(IRI.create("#name"));
@@ -47,6 +47,6 @@ owlapi: https://github.com/owlcs/owlapi
     //接口调用添加
     manager.addAxioms(ontology,dataAnnotationAxiomSet); 
     //以上操作可以简单理解为每一个知识点都是一个对象，但需要你将多个对象组装成一个文件。
-3、所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。    
-4、owl api 可以创建概念图也可以创建实例图，概念图就是schema相当于数据库，一个类相当于表的设计，实例图就是真实的业务数据。
+3、所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。<br />
+4、owl api 可以创建概念图也可以创建实例图，概念图就是schema相当于数据库，一个类相当于表的设计，实例图就是真实的业务数据。<br />
  
