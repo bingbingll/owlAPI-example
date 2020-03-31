@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.util.Arrays;
 
 @Component
+@SuppressWarnings("all")
 public class OntologyHelper {
     OWLOntologyManager m = OWLManager.createOWLOntologyManager();
     OWLDataFactory df = OWLManager.getOWLDataFactory();
@@ -66,6 +68,7 @@ public class OntologyHelper {
         } else {
             m.saveOntology(o, IRI.create(file.toURI()));
         }
+        m.clearOntologies();
     }
 
     public OWLOntology readOntology(File source)
@@ -106,6 +109,7 @@ public class OntologyHelper {
     public OWLAxiomChange createSubclass(OWLOntology o, OWLClass subclass, OWLClass superclass) {
         return new AddAxiom(o, df.getOWLSubClassOfAxiom(subclass, superclass));
     }
+
 
     public void applyChange(OWLAxiomChange... axiom) {
         applyChanges(axiom);
@@ -170,10 +174,11 @@ public class OntologyHelper {
         return new AddAxiom(o, expression);
     }
 
-    public OWLAxiomChange addObjectproperty(OWLOntology o, OWLIndividual target, OWLObjectProperty property, OWLIndividual value) {
+    public OWLAxiomChange addObjectProperty(OWLOntology o, OWLIndividual target, OWLObjectProperty property, OWLIndividual value) {
         OWLObjectPropertyAssertionAxiom prop = df.getOWLObjectPropertyAssertionAxiom(property, target, value);
         return new AddAxiom(o, prop);
     }
+
 
     public OWLDataProperty createDataProperty(String iri) {
         return createDataProperty(convertStringToIRI(iri));
@@ -183,11 +188,56 @@ public class OntologyHelper {
         return df.getOWLDataProperty(iri);
     }
 
-    public OWLAxiomChange addDataPropertyLabel(OWLOntology o,OWLDataProperty dataProperty,String label){
+    public OWLAxiomChange addDataPropertyLabel(OWLOntology o, OWLDataProperty dataProperty, String label) {
         OWLAnnotation owlAnnotation = df.getOWLAnnotation(df.getRDFSLabel(), df.getOWLLiteral(label));
-        return new AddAxiom(o,  df.getOWLAnnotationAssertionAxiom(dataProperty.getIRI(), owlAnnotation));
+        return new AddAxiom(o, df.getOWLAnnotationAssertionAxiom(dataProperty.getIRI(), owlAnnotation));
     }
 
+    /**
+     * 数据属性所属的类
+     *
+     * @param o
+     * @param dataProperty
+     * @param owlClass
+     * @return
+     */
+    public OWLAxiomChange addDataPropertyDomain(OWLOntology o, OWLDataProperty dataProperty, OWLClass owlClass) {
+        return new AddAxiom(o, df.getOWLDataPropertyDomainAxiom(dataProperty, owlClass));
+    }
+
+    /**
+     * 数据属性所属的数据类型
+     *
+     * @param o
+     * @param dataProperty
+     * @param dataType     : boolean/double/float/integer/string
+     * @return
+     */
+    public OWLAxiomChange addDataPropertyRange(OWLOntology o, OWLDataProperty dataProperty, String dataType) {
+        OWLDatatype owlDatatype = null;
+        if (dataType.equals("boolean")) {
+            owlDatatype = df.getBooleanOWLDatatype();
+        } else if (dataType.equals("double")) {
+            owlDatatype = df.getDoubleOWLDatatype();
+        } else if (dataType.equals("float")) {
+            owlDatatype = df.getFloatOWLDatatype();
+        } else if (dataType.equals("integer")) {
+            owlDatatype = df.getIntegerOWLDatatype();
+        } else {
+            owlDatatype = df.getStringOWLDatatype();
+        }
+        return new AddAxiom(o, df.getOWLDataPropertyRangeAxiom(dataProperty, owlDatatype));
+    }
+
+    /**
+     * 添加实例数据
+     *
+     * @param o
+     * @param individual
+     * @param property
+     * @param value
+     * @return
+     */
     public OWLAxiomChange addDataToIndividual(OWLOntology o, OWLIndividual individual, OWLDataProperty property, String value) {
         OWLLiteral literal = df.getOWLLiteral(value, OWL2Datatype.XSD_STRING);
         return new AddAxiom(o, df.getOWLDataPropertyAssertionAxiom(property, individual, literal));
