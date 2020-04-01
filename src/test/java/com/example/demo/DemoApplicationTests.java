@@ -347,7 +347,7 @@ class DemoApplicationTests {
 	}
 
 	/**
-	 * 演示如何删除类并删除该类的label
+	 * 演示如何删除类并删除该类的 rdfs:label
 	 */
 	@Test
 	void removeClass() {
