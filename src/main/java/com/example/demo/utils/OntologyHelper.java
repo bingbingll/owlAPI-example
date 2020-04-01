@@ -8,6 +8,7 @@ import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLAxiomChange;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Set;
 
 @Component
 @SuppressWarnings("all")
@@ -49,6 +51,8 @@ public class OntologyHelper {
         return m.createOntology(iri);
     }
 
+
+
     /**
      * 删除当前的本体
      *
@@ -68,6 +72,7 @@ public class OntologyHelper {
         } else {
             m.saveOntology(o, IRI.create(file.toURI()));
         }
+        m.removeOntology(o);
         m.clearOntologies();
     }
 
@@ -84,6 +89,8 @@ public class OntologyHelper {
     public OWLClass createClass(IRI iri) {
         return df.getOWLClass(iri);
     }
+
+
 
     public OWLAxiomChange addClass(OWLOntology o, OWLClass owlClass) {
         return new AddAxiom(o, df.getOWLDeclarationAxiom(owlClass));
@@ -102,6 +109,7 @@ public class OntologyHelper {
             owlLiteral = df.getOWLLiteral(label.toString());
         }
         OWLAnnotation owlAnnotation = df.getOWLAnnotation(rdfsLabel, owlLiteral);
+
         return new AddAxiom(o, df.getOWLAnnotationAssertionAxiom(owlClass.getIRI(), owlAnnotation));
     }
 
@@ -110,6 +118,9 @@ public class OntologyHelper {
         return new AddAxiom(o, df.getOWLSubClassOfAxiom(subclass, superclass));
     }
 
+    public void removeAxioms(OWLOntology o, Set<OWLAxiom> owlAxioms) {
+        m.removeAxioms(o, owlAxioms.stream());
+    }
 
     public void applyChange(OWLAxiomChange... axiom) {
         applyChanges(axiom);
@@ -195,7 +206,6 @@ public class OntologyHelper {
 
     /**
      * 数据属性所属的类
-     *
      * @param o
      * @param dataProperty
      * @param owlClass
@@ -207,28 +217,26 @@ public class OntologyHelper {
 
     /**
      * 数据属性所属的数据类型
-     *
      * @param o
      * @param dataProperty
-     * @param dataType     : boolean/double/float/integer/string
+     * @param dataType : boolean/double/float/integer/string
      * @return
      */
     public OWLAxiomChange addDataPropertyRange(OWLOntology o, OWLDataProperty dataProperty, String dataType) {
-        OWLDatatype owlDatatype = null;
-        if (dataType.equals("boolean")) {
-            owlDatatype = df.getBooleanOWLDatatype();
-        } else if (dataType.equals("double")) {
-            owlDatatype = df.getDoubleOWLDatatype();
-        } else if (dataType.equals("float")) {
-            owlDatatype = df.getFloatOWLDatatype();
-        } else if (dataType.equals("integer")) {
-            owlDatatype = df.getIntegerOWLDatatype();
-        } else {
-            owlDatatype = df.getStringOWLDatatype();
+        OWLDatatype owlDatatype=null;
+        if (dataType.equals("boolean")){
+            owlDatatype=df.getBooleanOWLDatatype();
+        }else if (dataType.equals("double")){
+            owlDatatype=df.getDoubleOWLDatatype();
+        }else if (dataType.equals("float")){
+            owlDatatype=df.getFloatOWLDatatype();
+        }else if (dataType.equals("integer")){
+            owlDatatype= df.getIntegerOWLDatatype();
+        }else {
+            owlDatatype= df.getStringOWLDatatype();
         }
-        return new AddAxiom(o, df.getOWLDataPropertyRangeAxiom(dataProperty, owlDatatype));
+        return new AddAxiom(o, df.getOWLDataPropertyRangeAxiom(dataProperty, owlDatatype ));
     }
-
     /**
      * 添加实例数据
      *

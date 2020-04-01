@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.utils.OntologyHelper;
 import org.junit.jupiter.api.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import static org.semanticweb.owlapi.model.AxiomType.ANNOTATION_ASSERTION;
 
 
 @SpringBootTest
@@ -341,5 +344,58 @@ class DemoApplicationTests {
 		} catch (OWLOntologyStorageException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 演示如何删除类并删除该类的label
+	 */
+	@Test
+	void removeClass() {
+		try {
+			OntologyHelper helper=new OntologyHelper();
+			//加载文件
+			File file = loadFile("examples");
+			OWLOntology ontology = helper.readOntology(file);
+			//我们这里的class Name 给定上面的添加的类名称 比如是 User,通过本体类获取全部的类进行遍历并得到这个 User 类
+			//注意下面的所有User 都可以使用变量来传递。
+			String className="User";
+			OWLClass aClass = ontology.classesInSignature()
+					.filter(owlClass -> owlClass.getIRI().getRemainder().get().equals(className))
+					.findFirst()
+					.get();
+			//删除要用OWLAxiom类
+			Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
+			//开始遍历
+			for (OWLAxiom ax : ontology.getAxioms()) {
+				//发现集合中的该类与要删除的类相同时放入
+				if (ax.getSignature().contains(aClass)) {
+					axiomsToRemove.add(ax);
+					System.out.println("to remove from " + aClass.getIRI().toString() + ": " + ax);
+				}
+				//由于label类归属于AnnotationAssertion类，又因为该labe时在User 中并且包含了label所以再次存放该类
+				if (ax.getAxiomType().equals(ANNOTATION_ASSERTION)
+						&& ax.getNNF().toString().indexOf(className) > 0
+						&& ax.getNNF().toString().indexOf("label") > 0) { //注意 该label是固定不变的
+					axiomsToRemove.add(ax);
+					System.out.println("to remove by label" + aClass.getIRI().toString() + ": " + ax);
+				}
+			}
+			//执行删除操作
+			helper.removeAxioms(ontology, axiomsToRemove);
+			helper.writeOntology(ontology, file, "ttl");
+		} catch (OWLOntologyCreationException e) {
+			e.printStackTrace();
+		} catch (OWLOntologyStorageException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private File loadFile(String IRIName) {
+		String property = System.getProperty("user.dir");
+		File file = new File(property + "\\src\\main\\resources\\ontology\\" + IRIName.trim() + ".ttl");
+		if (file.exists()) {
+			return file;
+		}
+		return null;
 	}
 }
