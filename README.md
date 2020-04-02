@@ -23,10 +23,10 @@ owlapi: https://github.com/owlcs/owlapi
 （9）	owl：equivalentProperty：术语可以声明两个属性为等价属性。相互等价的属性将一个个体关联到同一组别个体。它也可以被称为创建同义属性。  
 
 # 工程介绍  
-## 使用示例  
+## 示例代码  
 推荐使用 turtle 文件进行操作方便阅读。本工程中 [OntologyHelper](https://github.com/bingbingll/owlAPI-example/blob/master/src/main/java/com/example/demo/utils/OntologyHelper.java) 类封装了一些常用的操作类可以直接方便使用。  
 示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java)   
-## owlAPI使用心得  
+## 心得笔记 
 1、强烈建议使用protege客户端先手动设计一个图，并在该图中增加实例数据，然后在看本工程有助于快速了解，否则很难理解api的设计。<br />
 2、OWL-API 非我们所理解的面向对象常规调用操作，他的框架时面向对象，但是你使用的接口是过程编写，例如我们要给一个数据属性添加label看如下代码：<br />
 >       
@@ -53,7 +53,7 @@ owlapi: https://github.com/owlcs/owlapi
 示例：
 >   
 >>
-    // 要对整张图添加注解.
+    // 要对本体添加注解.
     String VersionInfo="这是一个 Comment 信息";
     //首先设置一个文字对象
     OWLLiteral lit = df.getOWLLiteral(VersionInfo,"zh");
@@ -62,7 +62,7 @@ owlapi: https://github.com/owlcs/owlapi
           .getIRI());
     //将文字对象和注解属性进行绑定获取到注解类
     OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
-    // 现在为本体整张图添加注解并进行应用。
+    // 现在为本体添加注解并进行应用。
     m.applyChange(new AddOntologyAnnotation(o, anno));
     //以上操作方式可以 举一反三 针对不同的需求使用org.semanticweb.owlapi.vocab包下不同的词汇类中的不同常量进行添加。
 >>  
