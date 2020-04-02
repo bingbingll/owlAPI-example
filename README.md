@@ -49,4 +49,27 @@ owlapi: https://github.com/owlcs/owlapi
     //以上操作可以简单理解为每一个知识点都是一个对象，但需要你将多个对象组装成一个文件。
 3、所有的放入都要使用 *Axiom 相关接口放入。比如我们要创建一个class然后需要进行断言放入。<br />
 4、owl api 可以创建概念图也可以创建实例图，概念图就是schema相当于数据库，一个类相当于表的设计，实例图就是真实的业务数据。<br />
- 
+5、所有添加的词汇操作都在owlapi-distribution-5.1.12.jar的org.semanticweb.owlapi.vocab 包下，这里涵盖了很多用到的词汇和类。
+示例：
+>   
+>>
+    // 要对整张图添加注解.
+    String VersionInfo="这是一个 Comment 信息";
+    //首先设置一个文字对象
+    OWLLiteral lit = df.getOWLLiteral(VersionInfo,"zh");
+    // 创建注解并于指定是哪个词汇的常量
+    OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO
+          .getIRI());
+    //将文字对象和注解属性进行绑定获取到注解类
+    OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
+    // 现在为本体整张图添加注解并进行应用。
+    m.applyChange(new AddOntologyAnnotation(o, anno));
+    //以上操作方式可以 举一反三 针对不同的需求使用org.semanticweb.owlapi.vocab包下不同的词汇类中的不同常量进行添加。
+>>  
+    //结果展示
+    <http://graphSchema.org/test> rdf:type owl:Ontology ;
+                                  rdf:Description "这是一个 Description 信息！"@zh ;
+                                  rdfs:comment "这是一个 Comment 信息"@zh ;
+                                  owl:versionInfo "这是一个 VersionInfo 信息！"@zh .
+
+6、若是还有不清楚不知道如何编写时请查看 owl api 第三版，第四版官网示例代码：[code-examples](https://github.com/owlcs/owlapi/wiki/Documentation#code-examples)

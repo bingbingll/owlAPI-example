@@ -5,6 +5,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
+import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -26,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -113,6 +115,47 @@ public class OntologyHelper {
         return new AddAxiom(o, df.getOWLAnnotationAssertionAxiom(owlClass.getIRI(), owlAnnotation));
     }
 
+    /**
+     * 给类添加备注
+     *
+     * @param o
+     * @param comment  备注的内容
+     * @param owlClass 创建的类
+     * @return
+     */
+    public OWLAxiomChange addClassComment(OWLOntology o, String comment, OWLClass owlClass) {
+        return new AddAxiom(o, df.getOWLAnnotationAssertionAxiom(owlClass.getIRI(), df.getOWLAnnotation(df.getRDFSComment(), df.getOWLLiteral(comment, "zh"))));
+    }
+
+    /**
+     * 给概念图添加注解
+     *
+     * @param o
+     * @param description
+     */
+    public void addGraphDescription(OWLOntology o, String description) {
+        OWLLiteral lit = df.getOWLLiteral(description, "zh");
+        OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.RDF_DESCRIPTION
+                .getIRI());
+        OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
+        m.applyChange(new AddOntologyAnnotation(o, anno));
+    }
+
+    public void addGraphVersionInfo(OWLOntology o, String versionInfo) {
+        OWLLiteral lit = df.getOWLLiteral(versionInfo, "zh");
+        OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO
+                .getIRI());
+        OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
+        m.applyChange(new AddOntologyAnnotation(o, anno));
+    }
+
+    public void addGraphComment(OWLOntology o, String comment) {
+        OWLLiteral lit = df.getOWLLiteral(comment, "zh");
+        OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT
+                .getIRI());
+        OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
+        m.applyChange(new AddOntologyAnnotation(o, anno));
+    }
 
     public OWLAxiomChange createSubclass(OWLOntology o, OWLClass subclass, OWLClass superclass) {
         return new AddAxiom(o, df.getOWLSubClassOfAxiom(subclass, superclass));
