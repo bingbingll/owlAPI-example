@@ -53,16 +53,15 @@ owlapi: https://github.com/owlcs/owlapi
 示例：
 >   
 >>
-    // 要对本体添加注解.
-    String VersionInfo="这是一个 Comment 信息";
-    //首先设置一个文字对象
+    // 要对本体添加版本信息.
+    String VersionInfo="这是一个 VersionInfo 信息！";
+    //首先获取一个文字对象并赋值
     OWLLiteral lit = df.getOWLLiteral(VersionInfo,"zh");
-    // 创建注解并于指定是哪个词汇的常量
-    OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO
-          .getIRI());
+    //获取一个注解并于指定是哪个词汇的常量，设置后系统会自动给本体添加相关标准。
+    OWLAnnotationProperty owlAnnotationProperty = df.getOWLAnnotationProperty(OWLRDFVocabulary.OWL_VERSION_INFO.getIRI());
     //将文字对象和注解属性进行绑定获取到注解类
     OWLAnnotation anno = df.getOWLAnnotation(owlAnnotationProperty, lit);
-    // 现在为本体添加注解并进行应用。
+    //现在为本体添加注解并进行应用。
     m.applyChange(new AddOntologyAnnotation(o, anno));
     //以上操作方式可以 举一反三 针对不同的需求使用org.semanticweb.owlapi.vocab包下不同的词汇类中的不同常量进行添加。
 >>  
