@@ -25,7 +25,8 @@ owlapi: https://github.com/owlcs/owlapi
 # 工程介绍  
 ## 示例代码  
 推荐使用 turtle 文件进行操作方便阅读。本工程中 [OntologyHelper](https://github.com/bingbingll/owlAPI-example/blob/master/src/main/java/com/example/demo/utils/OntologyHelper.java) 类封装了一些常用的操作类可以直接方便使用。  
-示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java)   
+示例程序[DemoApplicationTests](https://github.com/bingbingll/owlAPI-example/blob/master/src/test/java/com/example/demo/DemoApplicationTests.java) <br />
+工程中有对本体和知识图谱关系的介绍文档。  
 ## 心得笔记 
 1、强烈建议使用protege客户端先手动设计一个图，并在该图中增加实例数据，然后在看本工程有助于快速了解，否则很难理解api的设计。<br />
 2、OWL-API 非我们所理解的面向对象常规调用操作，他的框架时面向对象，但是你使用的接口是过程编写，例如我们要给一个数据属性添加label看如下代码：<br />
